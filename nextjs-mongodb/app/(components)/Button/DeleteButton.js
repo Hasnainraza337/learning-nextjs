@@ -1,12 +1,14 @@
 "use client"
-import { Button, message } from "antd"
+import { Button } from "antd"
 
 export default function DeleteButton({ title, icon, type, id }) {
 
 
     const handleDelete = async (id) => {
+        console.log("id", id);
+       
+    };
 
-    }
 
     return (
         <>

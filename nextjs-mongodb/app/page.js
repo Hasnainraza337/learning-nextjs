@@ -23,7 +23,7 @@ export default async function Home() {
   dbConnect()
   const products = await getProducts()
 
-  console.log("Products", products)
+  // console.log("Products", products)
 
 
 
@@ -61,6 +61,7 @@ export default async function Home() {
                     </tr>
                   </thead>
                   <tbody>
+
                     {products?.map((product, i) => {
                       return (
                         <tr key={i}>
@@ -77,7 +78,25 @@ export default async function Home() {
                           </td>
                         </tr>
                       )
-                    })}
+                    })
+                    }
+                    {/* {products?.map((product, i) => {
+                      return (
+                        <tr key={i}>
+                          <th>{i + 1}</th>
+                          <td>{product.imageUrl ? <Image src={product.imageUrl} style={{ width: 50, height: 50 }} className='rounded-circle' /> : <Avatar icon={<UserOutlined />} style={{ width: 50, height: 50 }} />}</td>
+                          <td>{product.name}</td>
+                          <td>{product.price}</td>
+                          <td>{product.description}</td>
+                          <td>
+                            <Space>
+                              <Tooltip title="Delete" ><DeleteButton type="danger" title="Delete" id={product._id.toString()} icon={<DeleteOutlined />} /></Tooltip>
+                              <Tooltip title="Edit"><Buttons type="primary" product={{ _id: product._id.toString(), name: product.name, price: product.price, description: product.description, imageUrl: product.imageUrl }} isUpdate={true} title="Update" icon={<EditOutlined />} /> </Tooltip>
+                            </Space>
+                          </td>
+                        </tr>
+                      )
+                    })} */}
                   </tbody>
                 </table>
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { storage } from "@/config/firebase";
 import Image from "next/image";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import axios from "axios";
 
 
 export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }) {
@@ -68,7 +69,8 @@ export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }
             },
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    let data = { ...product, file: downloadURL }
+                    let data = { ...product, imageUrl: downloadURL }
+                    console.log("data", data)
                     createDocument(data)
                 });
             }
@@ -76,13 +78,23 @@ export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }
     };
 
     const createDocument = async (product) => {
+        console.log("product", product)
+        try {
+            const response = await axios.post("http://localhost:3000/api/product", product)
 
+            const data = response.data
+            setState(data)
+            message.success("A new Product Added succesfully")
+
+        } catch (error) {
+            console.log(error.message)
+        }
 
         setIsProcessing(false)
     }
 
 
-
+ 
 
 
     const updateProduct = async () => {
