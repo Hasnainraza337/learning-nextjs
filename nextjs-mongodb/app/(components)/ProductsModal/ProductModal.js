@@ -8,6 +8,8 @@ import axios from "axios";
 
 
 export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }) {
+
+
     const [state, setState] = useState({
         name: product.name || "",
         price: product.price || "",
@@ -78,7 +80,6 @@ export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }
     };
 
     const createDocument = async (product) => {
-        console.log("product", product)
         try {
             const response = await axios.post("http://localhost:3000/api/product", product)
 
@@ -94,7 +95,7 @@ export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }
     }
 
 
- 
+
 
 
     const updateProduct = async () => {
@@ -104,45 +105,29 @@ export default function ProductModal({ isOpen, onClose, isUpdate, product = {} }
             return message.error("All Fields are Required")
         }
 
-        const updateProduct = {
+        const updateData = {
             ...product,
             name,
             price,
             description
         };
 
-        if (file) {
-            const fileName = product.id;
-            const fileExtension = file.name.split(".").pop();
-            const storageRef = ref(storage, `images/${fileName}.${fileExtension}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log("Upload is " + progress + "% done");
-                    setprogress(Math.floor(progress));
-                },
-                (error) => {
-                    message.error("Something went wrong while uploading file", error.message);
-                    setIsProcessing(false);
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        let data = { ...updateProduct, file: downloadURL };
-                        updateDocument(data);
-                    });
-                }
-            );
-        } else {
-            updateDocument(updateProduct);
-        }
-
         setIsProcessing(true);
+
+        await updateDocument(updateData);
+
     };
 
-    const updateDocument = async (updateProduct) => {
+    const updateDocument = async (updateData) => {
+        try {
+            await axios.put(`http://localhost:3000/api/product/${product._id}`, updateData)
+            setState(updateData)
+            setState({ name: "", price: "", description: "" })
+            message.success("Product Upadate successfuly")
+        } catch (error) {
+            console.log(error)
+            message.error("Error occur while update product")
+        }
 
         setIsProcessing(false);
     };

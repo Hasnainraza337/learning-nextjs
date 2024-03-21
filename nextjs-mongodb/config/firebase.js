@@ -3,6 +3,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
+
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_ADMIN,
     projectId: process.env.PROJECT_ID,

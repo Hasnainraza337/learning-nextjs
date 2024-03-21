@@ -20,3 +20,20 @@ export const DELETE = async (req, route) => {
         return NextResponse.json({ message: "Error Occur While Deleting Product", error })
     }
 }
+
+
+
+export const PUT = async (req, route) => {
+    try {
+
+        const id = route.params.id
+        const body = await req.json()
+
+        const data = await Product.updateOne({ _id: id }, { $set: body })
+        return NextResponse.json({ message: "Product update Successfully.", data })
+
+
+    } catch (error) {
+        return NextResponse.json({ message: "Error Occur While updating Product", error })
+    }
+}
